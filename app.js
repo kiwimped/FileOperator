@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(3001, () => {
-  console.log('HTTP Server and REST API running on port 3000');
+  console.log('HTTP Server and REST API running on port 3001');
 });
 
 // Step 6: Arrow Function Example
