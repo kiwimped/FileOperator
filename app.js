@@ -30,12 +30,3 @@ const server = http.createServer((req, res) => {
 server.listen(3001, () => {
   console.log('HTTP Server and REST API running on port 3001');
 });
-
-// Step 6: Arrow Function Example
-const add = (a, b) => a + b;
-console.log('Arrow Function Example:', add(5, 3));
-
-// Step 7: Node Features - Destructuring
-const user = { name: 'Alice', age: 25 };
-const { name, age } = user;
-console.log(`Destructuring Example: ${name}, ${age}`);
