@@ -16,79 +16,82 @@ next()
 })
 
 
-const workouts = [
-    { id: 1, name: 'Pushups' },
-    { id: 2, name: 'Situps' },
-    { id: 3, name: 'Jogging' },
+const shopping = [
+    { id: 1, name: 'Orange Juice' },
+    { id: 2, name: 'Pizza Pockets' },
+    { id: 3, name: 'Box of Eggs' },
 ]
 
 app.get('/', (req, res) =>{
-    res.send(`<button ><a href="/api/workouts""> workouts </a> </button> <button ><a href="/api/workouts/add""> add workouts </a> </button> <button><a href="/api/workouts/subtract">remove workout</a></button> `)
+    res.send(`<button ><a href="/api/shopping""> shopping </a> </button> <button ><a href="/api/shopping/add""> add Grocery </a> </button>`)
 })
 
-app.get('/api/workouts', (req,res) =>{
-    res.render("workouts.ejs", {workouts})
+
+app.get('/api/shopping', (req,res) =>{
+  res.render("shopping.ejs", {shopping})
 })
 
-app.get('/api/workouts/add', (req,res) =>{
-    res.render('workoutForm.ejs');
+
+
+app.get('/api/shopping/add', (req,res) =>{
+    res.render('shoppingForm.ejs');
 })
-app.get('/api/workouts/subtract', (req,res) =>{
-  res.render('workoutForm.ejs');
-})
+
 
 // we will continue this on thusday
-app.get('/api/workouts/add/:id', (req,res) =>{
-    res.render('updateWorkout.ejs');
+app.get('/api/shopping/add/:id', (req,res) =>{
+    res.render('updateShopping.ejs');
 })
 
-app.post('/api/workouts', (req, res)=>{
+app.post('/api/shopping', (req, res)=>{
 
     console.log(req.body.name);
 
     const newWorkout ={
-    id:workouts.length + 1,
+    id:shopping.length + 1,
     name: req.body.name
     };
 
-    workouts.push(newWorkout);
-    res.redirect('/api/workouts');
+    shopping.push(newWorkout);
+    res.redirect('/api/shopping');
 
 })
 
 
 // Define a PUT route handler for updating a workout.
-app.put('/api/workouts/update/:id', (req, res) => {
-    console.log("fired put");
-    const workoutId = parseInt(req.params.id);
-    const updatedName = req.body.name;
+app.post('/api/shopping/update/:id', (req, res) => {
+  console.log("fired put");
+  const shoppingId = parseInt(req.params.id);
+  const updatedName = req.body.name;
 
-    const workout = workouts.find(w => w.id === workoutId);
+  const shop = shopping.find(w => w.id === shoppingId);
 
-    if (workout) {
-      workout.name = updatedName;
-      res.status(200).send(`Workout with ID ${workoutId} updated.`);
-    } else {
-      res.status(404).send(`Workout with ID ${workoutId} not found.`);
-    }
+  if (shop) {
+    shop.name = updatedName;
+    res.status(200).send(`Shopping item with ID ${shoppingId} updated.`);
+  } else {
+    res.status(404).send(`Shopping item with ID ${shoppingId} not found.`);
+  }
   });
+ 
 
 
 // Define a DELETE route handler for deleting a workout.
-app.delete('/api/workouts/delete/:id', (req, res) => {
-    const workoutId = parseInt(req.params.id);
+app.post('/api/shopping/delete/:id', (req, res) => {
+    const shoppingId = parseInt(req.params.id);
 
-    const index = workouts.findIndex(w => w.id === workoutId);
+    const index = shopping.findIndex(s => s.id === shoppingId);
 
     if (index !== -1) {
-      workouts.splice(index, 1);
+      shopping.splice(index, 1);
     //   res.status(200).send(`Workout with ID ${workoutId} deleted.`);
-      res.redirect('/api/workouts')
+      res.redirect('/api/shopping')
     } else {
-      res.status(404).send(`Workout with ID ${workoutId} not found.`);
+      res.status(404).send(`shopping item with ID ${shoppingId} not found.`);
     }
   });
 
 app.listen(port, ()=>{
     console.log(`Server running at http://localhost:${port}/`);
 })
+

@@ -1,0 +1,19 @@
+<h1>Welcome to my shopping!</h1>
+
+<% for(i = 0; i < shopping.length; i++) { %>
+  <div>
+    <h1><%= shopping[i].name %></h1>
+    
+   <%# update form %>
+    <form action="/api/shopping/update/<%= shopping[i].id %>" method="POST">
+      <input type = "text" name = "name" id="name" placeholder="<%= shopping[i].name %>"/>
+      <button type="submit">Update</button>
+    </form>
+
+    <%# delete button %>
+    <form action="/api/shopping/delete/<%= shopping[i].id %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit">Delete <name/> </button>
+    </form>
+  </div>
+<% } %>
