@@ -34,7 +34,7 @@ app.get('/api/workouts/add', (req,res) =>{
     res.render('workoutForm.ejs');
 })
 app.get('/api/workouts/subtract', (req,res) =>{
-  res.render('workoutDelete.ejs');
+  res.render('workoutForm.ejs');
 })
 
 // we will continue this on thusday
