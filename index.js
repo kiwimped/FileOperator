@@ -27,10 +27,25 @@ app.get('/', (req, res) =>{
 })
 
 
-app.get('/api/shopping', (req,res) =>{
-  res.render("shopping.ejs", {shopping})
-})
 
+
+app.get('/api/shopping', async (req, res) => {
+  try{
+  const delayedData = new Promise((resolve,reject) => {
+    setTimeout(() => {
+      //resolve(shopping);
+      reject("I don;t want to work");
+    }, 2000);
+  });
+
+  const result = await delayedData;
+  res.render("shopping.ejs",{shopping:result});
+  console.log("Shopping ON")
+}catch (error) {
+  console.log(error);
+  res.status(500).send(`${error}`);
+}
+});
 
 
 app.get('/api/shopping/add', (req,res) =>{
@@ -94,4 +109,22 @@ app.post('/api/shopping/delete/:id', (req, res) => {
 app.listen(port, ()=>{
     console.log(`Server running at http://localhost:${port}/`);
 })
+
+const delayedHello = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Hello, after 2 seconds!");
+  }, 2000);
+});
+
+delayedHello.then(message => console.log(message));
+
+const faultyOperation = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject(new Error("Something went wrong"));
+  }, 2000);
+});
+
+faultyOperation
+  .then(message => console.log(message))
+  .catch(error => console.log(error.message));
 
