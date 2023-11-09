@@ -72,3 +72,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### Update
 # new undo and remove button
 Use them to get rid of an object from the list and undo the removal of the item from the list.
+
+### Update #2
+# now availible on vercel
+Use this link:
+to access the site
