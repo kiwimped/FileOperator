@@ -75,5 +75,6 @@ Use them to get rid of an object from the list and undo the removal of the item 
 
 ### Update #2
 # now availible on vercel
-Use this link:
-to access the site
+Use this link: https://week6-kiwimped.vercel.app
+
+
