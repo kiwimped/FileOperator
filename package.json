@@ -7,10 +7,21 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
+  "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
-    "method-override": "^3.0.0"
+    "env": "^0.0.2",
+    "env-cmd": "^10.1.0",
+    "express-session": "^1.17.3",
+    "method-override": "^3.0.0",
+    "mongodb": "^6.2.0",
+    "mongoose": "^8.0.0",
+    "nodemon": "^3.0.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
   }
 }

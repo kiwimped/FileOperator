@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<button>
+    <a href="/api/workouts""> workouts </a> </button> <button ><a href=" /api/workouts/add""> add workouts </a>
+</button> 
+<button>
+    <a href="/api/workouts/subtract">remove workout</a>
+</button>
+<%if(user) {%>
+    hello user.username 
+    <button>
+        <a href="/logout">logout</a>
+    </button>
+<%}else{%>
+    <button>
+        <a href="/login">login</a>
+    </button>
+    <%}%>
+</html>

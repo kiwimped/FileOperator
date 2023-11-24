@@ -1,0 +1,174 @@
+import express from 'express';
+const app = express();
+const port = 3000;
+import methodOverride from 'method-override';
+import ejs from 'ejs';
+import mongoose from 'mongoose';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+import bcrypt from 'bcryptjs';
+import session from 'express-session';
+import "dotenv/config" 
+app.use(express.urlencoded());
+app.use(express.json());
+app.set('view engine', 'ejs');
+app.engine('ejs', ejs.renderFile);
+//app.engine('ejs', require('ejs').__express);
+app.use(methodOverride('_method'))
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {secure:true}
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+
+mongoose.connect('mongodb://127.0.0.1:27017/ExpressTest')
+  .then(() => console.log('Connected to MongoDB using Mongoose'))
+  .catch(err => console.log('Could not connect to MongoDB', err));
+
+const workoutSchema = new mongoose.Schema({
+  name: String
+});
+
+const Workout = mongoose.model('workouts', workoutSchema);
+
+const userSchema = new mongoose.Schema({
+  username: String,
+  password: String
+});
+const User = mongoose.model('User', userSchema);
+passport.use(new LocalStrategy(
+  async (username, password, done) => {
+    const user = await User.findOne({ username: username });
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      return done(null, false, { message: 'Incorrect username or password.' });
+    }
+    return done(null, user);
+  }
+));
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
+});
+
+
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+app.post('/register', async (req, res) => {
+  try {
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+    const newUser = new User({ username: req.body.username, password: hashedPassword });
+    await newUser.save();
+    res.redirect('/login');
+  } catch (error) {
+    res.redirect('/register');
+  }
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+  console.log(req.user);
+  res.redirect('/~' + req.user.username);
+
+});
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/login');
+});
+
+app.use((req, res, next) => {
+  console.log(`${req.method} request for ${req.url}`);
+  next()
+})
+
+app.get('/', (req, res) => {
+  res.render('index',{user:req.user})
+})
+
+app.get('/api/workouts/add', (req, res) => {
+  res.render('workoutForm.ejs');
+})
+app.get('/api/workouts/subtract', (req, res) => {
+  res.render('workoutDelete.ejs');
+})
+
+// we will continue this on thusday
+app.get('/api/workouts/add/:id', (req, res) => {
+  res.render('updateWorkout.ejs');
+})
+
+app.post('/api/workouts', async (req, res) => {
+  const { name } = req.body;
+
+  const workout = new Workout({
+    name
+  });
+
+  try {
+    const result = await workout.save();
+    console.log('Saved to database:', result);
+    res.redirect('/workouts');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error saving to database');
+  }
+});
+
+app.get('/api/workouts', async (req, res) => {
+  try {
+    const workouts = await Workout.find();
+    res.render('workouts',{workouts})
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error fetching from database');
+  }
+  
+});
+
+// Define a PUT route handler for updating a workout.
+app.put('/api/workouts/update/:id', (req, res) => {
+  console.log("fired put");
+  const workoutId = parseInt(req.params.id);
+  const updatedName = req.body.name;
+
+  const workout = workouts.find(w => w.id === workoutId);
+
+  if (workout) {
+    workout.name = updatedName;
+    res.status(200).send(`Workout with ID ${workoutId} updated.`);
+  } else {
+    res.status(404).send(`Workout with ID ${workoutId} not found.`);
+  }
+});
+
+
+// Define a DELETE route handler for deleting a workout.
+app.delete('/api/workouts/delete/:id', (req, res) => {
+  const workoutId = parseInt(req.params.id);
+
+  const index = workouts.findIndex(w => w.id === workoutId);
+
+  if (index !== -1) {
+    workouts.splice(index, 1);
+    res.status(200).send(`Workout with ID ${workoutId} deleted.`);
+    res.redirect('/api/workouts')
+  } else {
+    res.status(404).send(`Workout with ID ${workoutId} not found.`);
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}/`);
+})
