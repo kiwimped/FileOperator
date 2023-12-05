@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <button>
-    <a href="/api/workouts""> workouts </a> </button> <button ><a href=" /api/workouts/add""> add workouts </a>
+    <a href="/api/workouts""> Shopping </a> </button> <button ><a href=" /api/workouts/add""> add item </a>
 </button> 
 <button>
-    <a href="/api/workouts/subtract">remove workout</a>
+    <a href="/api/workouts/subtract">remove item</a>
 </button>
 <%if(user) {%>
-    hello user.username 
+    hello  <%=user.username%>
+    
     <button>
         <a href="/logout">logout</a>
     </button>

@@ -1,4 +1,4 @@
-<h1>Welcome to my workouts!</h1>
+<h1>Welcome to my shopping list!</h1>
 
 <% for(i = 0; i < workouts.length; i++) { %>
   <div>
@@ -12,7 +12,7 @@
     <%# delete button %>
     <form action="/api/workouts/delete/<%= workouts[i].id %>" method="POST">
       <input type="hidden" name="_method" value="DELETE">
-      <button type="submit">Delete</button>
+      <button type="submit">Delete <%= workouts[i].name %></button>
     </form>
   </div>
 <% } %>

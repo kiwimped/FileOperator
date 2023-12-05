@@ -8,7 +8,32 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcryptjs';
 import session from 'express-session';
-import "dotenv/config" 
+import "dotenv/config"
+import jwt from 'jsonwebtoken';
+import cors from 'cors';
+app.use(cors());
+const ensureAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login');
+  }
+};
+app.post('/addWorkout', ensureAuthenticated, /* existing code */);
+app.delete('/deleteWorkout', ensureAuthenticated, /* existing code */);
+
+const verifyToken = (req, res, next) => {
+  const token = req.header('Authorization')?.split(' ')[1];
+  if (!token) return res.sendStatus(401); // No token, unauthorized
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Invalid token
+    req.user = user;
+    next();
+  });
+};
+app.get('/getWorkouts', verifyToken, /* existing code */);
+ 
 app.use(express.urlencoded());
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -18,11 +43,11 @@ app.use(methodOverride('_method'))
 app.use(session({
   secret: process.env.SECRET,
   resave: false,
-  saveUninitialized: false,
-  cookie: {secure:true}
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 
 
@@ -54,11 +79,15 @@ passport.use(new LocalStrategy(
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+passport.deserializeUser(async (id, done) => {
+  try {
+      const user = await User.findById(id);
+      done(null, user);
+  } catch (err) {
+      done(err);
+  }
 });
+
 
 
 app.get('/register', (req, res) => {
@@ -80,13 +109,21 @@ app.get('/login', (req, res) => {
 });
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
   console.log(req.user);
-  res.redirect('/~' + req.user.username);
+  res.redirect('/');
 
 });
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+  const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  res.json({ token });
 });
+
+app.get('/logout', (req, res) => {
+  req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+  });
+});
+
 
 app.use((req, res, next) => {
   console.log(`${req.method} request for ${req.url}`);
