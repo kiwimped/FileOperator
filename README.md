@@ -75,4 +75,4 @@ Site displays Shopping list with the use of react tools
 Press the Submit To List button to add to the list of items
 Press the Done Shopping button to display the full list in a bullet form list
 
-[![Maintainability]https://api.codeclimate.com/v1/badges/da3178865cef4e55b15a/maintainability)]https://codeclimate.com/github/kiwimped/FileOperator/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/da3178865cef4e55b15a/maintainability)](https://codeclimate.com/github/kiwimped/FileOperator/maintainability)
