@@ -72,3 +72,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### Update
 # new undo and remove button
 Use them to get rid of an object from the list and undo the removal of the item from the list.
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/da3178865cef4e55b15a/maintainability)](https://codeclimate.com/github/kiwimped/FileOperator/maintainability)
