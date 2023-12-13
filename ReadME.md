@@ -6,4 +6,6 @@ Click on add Grocery to add an item to the shopping list. This page will send yo
 You can update and delete items: 
     Writing a new item in the text box then press the update button to update the list.
     Press the delete button to delete an item from the list. 
-    [![Maintainability](https://api.codeclimate.com/v1/badges/da3178865cef4e55b15a/maintainability)](https://codeclimate.com/github/kiwimped/FileOperator/maintainability)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/da3178865cef4e55b15a/maintainability)](https://codeclimate.com/github/kiwimped/FileOperator/maintainability)
+
