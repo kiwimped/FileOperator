@@ -9,3 +9,4 @@
 ### Login or press the register button to register an account, When you log in, a message is shown and says "Hello, {username}" on the home page. username and password are encrpyted in mongoose and is added to the mongodb compass
 
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/da3178865cef4e55b15a/maintainability)](https://codeclimate.com/github/kiwimped/FileOperator/maintainability)
