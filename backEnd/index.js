@@ -1,6 +1,6 @@
 import express from 'express';
 const app = express();
-const port = 3000;
+const port = 3001;
 import methodOverride from 'method-override';
 import ejs from 'ejs';
 import mongoose from 'mongoose';
@@ -11,6 +11,7 @@ import session from 'express-session';
 import "dotenv/config"
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
+import { Int32 } from 'mongodb';
 app.use(cors());
 const ensureAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -57,10 +58,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/ExpressTest')
   .catch(err => console.log('Could not connect to MongoDB', err));
 
 const workoutSchema = new mongoose.Schema({
-  name: String
+  name: String,
+  quantity: Number,
+  img: String,
+  cost: Number
 });
 
-const Workout = mongoose.model('workouts', workoutSchema);
+const Workout = mongoose.model('shoppings', workoutSchema);
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -136,7 +140,13 @@ app.get('/', (req, res) => {
 
 app.get('/api/workouts/add', (req, res) => {
   res.render('workoutForm.ejs');
+  
 })
+app.get('/api/workouts/add2', (req, res) => {
+  res.render('workoutForm2.ejs');
+  
+})
+
 app.get('/api/workouts/subtract', (req, res) => {
   res.render('workoutDelete.ejs');
 })
@@ -148,11 +158,13 @@ app.get('/api/workouts/add/:id', (req, res) => {
 
 app.post('/api/workouts', async (req, res) => {
   const { name } = req.body;
-
+  const { quantity } = req.body;
+  const { img } = req.body
+  const { cost } = req.body
   const workout = new Workout({
-    name
+    name, quantity, img, cost
   });
-
+  
   try {
     const result = await workout.save();
     console.log('Saved to database:', result);
@@ -166,24 +178,52 @@ app.post('/api/workouts', async (req, res) => {
 app.get('/api/workouts', async (req, res) => {
   try {
     const workouts = await Workout.find();
-    res.render('workouts',{workouts})
+
+    // Check the Accept header to determine the response type
+    const acceptHeader = req.get('Accept');
+    if (acceptHeader && acceptHeader.includes('text/html')) {
+      // Send HTML for browser requests
+      res.render('workouts', { workouts });
+    } else {
+      // Send JSON for other requests
+      res.json({ workouts });
+    }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching from the database');
+  }
+});
+
+app.get('/checkout', async (req, res) => {
+  try {
+    const workouts = await Workout.find();
+    res.render('checkout',{workouts})
   } catch (err) {
     console.log(err);
     res.status(500).send('Error fetching from database');
+    
   }
   
 });
+
+
 
 // Define a PUT route handler for updating a workout.
 app.put('/api/workouts/update/:id', (req, res) => {
   console.log("fired put");
   const workoutId = parseInt(req.params.id);
   const updatedName = req.body.name;
-
-  const workout = workouts.find(w => w.id === workoutId);
+  const updatedQuantity = req.body.quantity;
+  const updatedImg = req.body.img;
+  const updatedCost = req.body.cost;
+  const workout = Workout.find(w => w.id === workoutId);
 
   if (workout) {
     workout.name = updatedName;
+    workout.quantity = updatedQuantity;
+    workout.img = updatedImg;
+    workout.cost = updatedCost;
     res.status(200).send(`Workout with ID ${workoutId} updated.`);
   } else {
     res.status(404).send(`Workout with ID ${workoutId} not found.`);
@@ -192,20 +232,20 @@ app.put('/api/workouts/update/:id', (req, res) => {
 
 
 // Define a DELETE route handler for deleting a workout.
-app.delete('/api/workouts/delete/:id', (req, res) => {
-  const workoutId = parseInt(req.params.id);
+app.post('/api/workouts/delete/:id', (req,res)=>{
 
-  const index = workouts.findIndex(w => w.id === workoutId);
+const workoutId = parseInt(req.params.id);
 
-  if (index !== -1) {
-    workouts.splice(index, 1);
-    res.status(200).send(`Workout with ID ${workoutId} deleted.`);
-    res.redirect('/api/workouts')
-  } else {
-    res.status(404).send(`Workout with ID ${workoutId} not found.`);
-  }
-});
+const index = Workout.findIndex(w => w.id === workoutId);
 
+if(index !==-1){
+    Workout.splice(index,1);
+    // res.status(200).send(`Workout with ID ${workoutId} deleted.`)
+    res.redirect('/api/workouts/')
+}else{
+    res.status(404).send(`Workout with ID ${workoutId} not found.`)
+}
+})
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 })

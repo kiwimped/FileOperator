@@ -1,0 +1,28 @@
+<h1><a href="http://localhost:3000/">ShopSurf</a></h1>
+
+<h1>You've Purchased:</h1>
+<% for(i = 0; i < workouts.length; i++) { %>
+    <div>
+      <h1>Name:<%= workouts[i].name %></h1>
+      <h1>Quantity:<%= workouts[i].quantity %></h1>
+      <h1><%= workouts[i].img %></h1>
+      <h1>Price:<%= workouts[i].cost %></h1>
+      <h1>Total Batch:<%= workouts[i].quantity * workouts[i].cost %></h1>
+     <%# update form %>
+      
+  <% } %>
+  <a href="http://localhost:3000/"><button>GoHome</button></a>
+  <script>
+    function resetValues() {
+      // Assuming workouts is a global variable containing your data
+      for (var i = 0; i < workouts.length; i++) {
+        workouts[i].img = "";
+        workouts[i].name = "";
+        workouts[i].quantity = 0;
+        workouts[i].cost = 0;
+      }
+  
+      // Redirect to the home page
+      window.location.href = "http://localhost:3000/";
+    }
+  </script>

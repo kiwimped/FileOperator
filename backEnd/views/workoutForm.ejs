@@ -1,11 +1,21 @@
-<h1>welcome to my workout Form</h1>
+<h1><a href="http://localhost:3001/">ShopSurf</a></h1>
 <%# This is the opening tag for the HTML form element. It defines how the form behaves. %>
 
-<form action="/api/workouts" method="POST" class="form-example">
-			
-      <label for="name">Enter your item: </label>
-      <input type="text" name="name" id="name" required />
+    <form action="/api/workouts" method="POST" class="form-example">
 
-      <input type="submit" value="add a new item!" />
+        <h2>Black T-Shirt</h2>
+        <input style="visibility: hidden;" type="text" name="name" id="name" required value="Black T-Shirt"/>
+        <input style="visibility: hidden;" type="text" name="cost" id="cost" required value="12.99"/>
+        <h2>$12.99</h2>
+        <br/>
+        <img name="img" id="img" style="width: 300px; height: auto;" src="https://media.istockphoto.com/id/1281631373/vector/mockup-template-men-black-t-shirt-short-sleeve.jpg?s=612x612&w=0&k=20&c=SfYrtFXQS2wJ1-R9ozvxhUabJz3cnmH5HXv2sXW_mZk=" />
+        
+        <br/>
+        <label for="quantity">Enter Quantity</label>
+        <input type="number" name="quantity" id="quantity" required />
+        <br/>
+        <input type="submit" value="add a new item" />
+        
+        
 
-  </form>
+    </form>

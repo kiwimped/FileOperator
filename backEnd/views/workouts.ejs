@@ -1,8 +1,15 @@
-<h1>Welcome to my shopping list!</h1>
+<h1><a href="http://localhost:3001/">ShopSurf</a></h1>
+<h1>Welcome to my shopping list!  
+</h1>
 
 <% for(i = 0; i < workouts.length; i++) { %>
   <div>
     <h1><%= workouts[i].name %></h1>
+    
+    <h1><%= workouts[i].quantity %></h1>
+    <h1><%= workouts[i].img %></h1>
+    <h1><%= workouts[i].cost %></h1>
+    
     
    <%# update form %>
     <form action="/api/workouts/update/<%= workouts[i].id %>" method="GET">
@@ -10,9 +17,12 @@
     </form>
 
     <%# delete button %>
-    <form action="/api/workouts/delete/<%= workouts[i].id %>" method="POST">
+    <form action="/api/workouts/delete/<%= workouts[i].id %>?_method=DELETE" method="POST">
       <input type="hidden" name="_method" value="DELETE">
       <button type="submit">Delete <%= workouts[i].name %></button>
     </form>
+   
   </div>
 <% } %>
+<br/>
+<a href="/checkout"><button>Checkout</button></a>

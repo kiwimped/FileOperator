@@ -1,0 +1,19 @@
+<h1><a href="http://localhost:3001/">ShopSurf</a></h1>
+<%# This is the opening tag for the HTML form element. It defines how the form behaves. %>
+
+    <form action="/api/workouts" method="POST" class="form-example">
+        <h2>Green T-Shirt</h2>
+        <input style="visibility: hidden;" type="text" name="name" id="name" required value="Green T-Shirt" />
+        <input style="visibility: hidden;" type="text" name="cost" id="cost" required value="12.99"/>
+        <h2>$12.99</h2>
+        <br/>
+        <img name="img" id="img" style="width: 300px; height: auto;" src="https://t4.ftcdn.net/jpg/02/88/00/87/360_F_288008739_4i4cguqPGhckA5u65iwAqpNk7Gu6YyeS.jpg" />
+        <!--<label for="avatar">Upload an image (PNG or JPEG): </label>
+        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />-->
+        <br/>
+        <label for="quantity">Enter Quantity</label>
+        <input type="number" name="quantity" id="quantity" required/>
+        <br/>
+        <input type="submit" value="add a new item" />
+
+    </form>
