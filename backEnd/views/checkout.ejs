@@ -11,7 +11,7 @@
      <%# update form %>
       
   <% } %>
-  <a href="http://localhost:3000/"><button>GoHome</button></a>
+  <a href="http://localhost:3000/"><button onclick="resetValues()">GoHome</button></a>
   <script>
     function resetValues() {
       // Assuming workouts is a global variable containing your data
@@ -23,6 +23,6 @@
       }
   
       // Redirect to the home page
-      window.location.href = "http://localhost:3000/";
+      window.location.href = "http://localhost:3000/home";
     }
   </script>

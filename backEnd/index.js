@@ -232,18 +232,22 @@ app.put('/api/workouts/update/:id', (req, res) => {
 
 
 // Define a DELETE route handler for deleting a workout.
-app.post('/api/workouts/delete/:id', (req,res)=>{
+app.delete('/api/workouts/delete/:id', (req,res)=>{
 
 const workoutId = parseInt(req.params.id);
 
 const index = Workout.findIndex(w => w.id === workoutId);
-
+try{
 if(index !==-1){
     Workout.splice(index,1);
     // res.status(200).send(`Workout with ID ${workoutId} deleted.`)
     res.redirect('/api/workouts/')
 }else{
     res.status(404).send(`Workout with ID ${workoutId} not found.`)
+}
+}catch(error){
+  console.error(error);
+  res.status(500).send('Error Delete Workout from Database')
 }
 })
 app.listen(port, () => {
